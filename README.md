@@ -10,7 +10,7 @@ To submit your lab, fork [this repository](https://github.com/FAR-Lab/IDD-Fa18-L
 
 Here's my uploaded file: [chatServer.js](https://github.com/fpdaiber/IDD-Fa19-Lab6/edit/master/chatServer.js)
 
-I've created a vacay recommendation bot. I've used the template from David and set up my own questions. Every question has a counter ```chosen``` based on the response to determine a good vacation option: 
+I've created a vacay recommendation bot. I've used the template from David and set up my own questions. I ask a bunch of preference question such as resort vs. non-resort, beach vs. mountain, etc. Every question has a counter ```chosen``` based on the response to determine a good vacation option: 
 
 ```if (input.toLowerCase() == 'yes') {
       answer = 'Perfect!';
