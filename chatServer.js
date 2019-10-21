@@ -9,6 +9,7 @@ var app = express(); // webapp
 var http = require('http').Server(app); // connects http library to server
 var io = require('socket.io')(http); // connect websocket library to server
 var serverPort = 8000;
+var chosen = 0;
 
 
 //---------------------- WEBAPP SERVER SETUP ---------------------------------//
@@ -30,8 +31,8 @@ io.on('connect', function(socket) {
   var questionNum = 0; // keep count of question, used for IF condition.
   socket.on('loaded', function() { // we wait until the client has loaded and contacted us that it is ready to go.
 
-    socket.emit('answer', "Hey, hello I am \"___*-\" a simple chat bot example."); //We start with the introduction;
-    setTimeout(timedQuestion, 5000, socket, "What is your name?"); // Wait a moment and respond with a question.
+    socket.emit('answer', "Hi there, I'm Nigel."); //We start with the introduction;
+    setTimeout(timedQuestion, 4000, socket, "What is your name?"); // Wait a moment and respond with a question.
 
   });
   socket.on('message', (data) => { // If we get a new message from the client we process it;
@@ -51,42 +52,81 @@ function bot(data, socket, questionNum) {
 
   /// These are the main statments that make up the conversation.
   if (questionNum == 0) {
-    answer = 'Hello ' + input + ' :-)'; // output response
-    waitTime = 5000;
-    question = 'How old are you?'; // load next question
+    answer =  ' So, ' + input + ', I\'m your travel assistant. Let\'s find your next vacation destination'
+    waitTime = 4000;
+    question = 'What do you prefer, relaxing or exploring?'; // load next question
   } else if (questionNum == 1) {
-    answer = 'Really, ' + input + ' years old? So that means you were born in: ' + (2018 - parseInt(input)); // output response
-    waitTime = 5000;
-    question = 'Where do you live?'; // load next question
+    answer = 'Really, ' + input + '? Me, too!' ; // output response
+    waitTime = 4000;
+    question = 'Do you like going far?';
   } else if (questionNum == 2) {
-    answer = 'Cool! I have never been to ' + input + '.';
-    waitTime = 5000;
-    question = 'Whats your favorite color?'; // load next question
-  } else if (questionNum == 3) {
-    answer = 'Ok, ' + input + ' it is.';
-    socket.emit('changeBG', input.toLowerCase());
-    waitTime = 5000;
-    question = 'Can you still read the font?'; // load next question
-  } else if (questionNum == 4) {
-    if (input.toLowerCase() === 'yes' || input === 1) {
+    if (input.toLowerCase() == 'yes') {
       answer = 'Perfect!';
-      waitTime = 5000;
-      question = 'Whats your favorite place?';
-    } else if (input.toLowerCase() === 'no' || input === 0) {
-      socket.emit('changeFont', 'white'); /// we really should look up the inverse of what we said befor.
-      answer = ''
-      question = 'How about now?';
-      waitTime = 0;
-      questionNum--; // Here we go back in the question number this can end up in a loop
+      chosen = 1; // go far
     } else {
-      question = 'Can you still read the font?'; // load next question
-      answer = 'I did not understand you. Could you please answer "yes" or "no"?'
-      questionNum--;
-      waitTime = 5000;
-    }
-    // load next question
-  } else {
-    answer = 'I have nothing more to say!'; // output response
+      answer = 'Oh, too bad. I still got you!';
+      chosen = 0; // go not far
+      }
+    waitTime = 3000;
+    question = 'Are you a resort person?'; // load next question
+    console.log(chosen);
+ } else if (questionNum == 3) {
+   answer = 'Ok cool, ' + input + ' it is.';
+   if (input.toLowerCase() == 'yes') {
+     chosen = chosen + 10; // resort
+   } else {
+     answer = 'Oh, too bad. I still got you!';
+     chosen = chosen + 0; // no resort
+     }
+   waitTime = 4000;
+   question = 'Do you prefer beach over mountain?'; // load next question
+   console.log(chosen);
+} else if (questionNum == 4) {
+   answer = 'Alright, I feel you!';
+   if (input.toLowerCase() == 'yes') {
+     chosen = chosen + 100; // beach
+   } else {
+     answer = 'Oh, too bad. I still got you!';
+     chosen = chosen + 0; // mountain
+   }
+   waitTime = 4000;
+   question = 'Where do you live?'; // load next question
+   console.log(chosen);
+ } else if (questionNum == 5) {
+   answer = input + '! What a great place. I\'ll keep that in mind.';
+   waitTime = 4000;
+   question = 'Ok, do you wanna see what I have found for you?'; // load next question
+   console.log(chosen);
+} else if (questionNum == 6) {
+   if (chosen == 0) {
+     answer = 'Ok here\'s what I have found: \n The Blue Ridge Mountains! It\'s close, lot\'s of small cabins and great mountains for hiking.'; // not far, no resort, no beach
+ } else if (chosen == 1) {
+       answer = 'Ok here\'s what I have found: \n The Rockies! It\'s far from your place, lot\'s of small cabins and great mountains for hiking.'; // far, no resort, no beach
+ } else if (chosen == 10) {
+       answer = 'Ok here\'s what I have found: \n Mohonk Mountain Resort! It\'s not far from your place, has a great resort with spa and everything and great mountains for hiking.'; // not far, resort, no beach
+ } else if (chosen == 100) {
+       answer = 'Ok here\'s what I have found: \n Asbury Park! It\'s not far from your place, has small B&B\'s and a nice beach.'; // not far, no resort, beach
+ } else if (chosen == 110) {
+       answer = 'Ok here\'s what I have found: \n Hilton Head! It\'s not far from your place, has great resorts and a nice beach.'; // not far, resort, beach
+ } else if (chosen == 111) {
+       answer = 'Ok here\'s what I have found: \n Bali! It\'s far from your place, has wonderful resorts and the best beaches.'; // far, resort, beach
+ } else if (chosen == 11) {
+       answer = 'Ok here\'s what I have found: \n St. Moritz, Switzerland! It\'s far from your place, has wonderful resorts and great mountains.'; // far, resort, no beach
+ } else if (chosen == 101) {
+       answer = 'Ok here\'s what I have found: \n Tulum, Mexico! It\'s far from your place, has small B&B\'s and a nice beach.'; // far, no resort, beach
+ }
+   waitTime = 7000;
+   question = 'Do you like what I found?'; // load next question
+ } else if (questionNum == 7) {
+   if (input.toLowerCase() === 'yes') {
+     answer = 'Awesome, glad I could help!'
+   } else {
+     answer = 'Oh, sorry to hear. Maybe next time!';
+   }
+   waitTime = 0;
+   question = '';
+ } else {
+    answer = 'I have nothing more to say! Gotta go, see ya! :)'; // output response
     waitTime = 0;
     question = '';
   }
