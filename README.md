@@ -44,8 +44,7 @@ I've created a vacay recommendation bot. I've used the template from David and s
 
 ## Record someone trying out your ChatBot
 
-![alt text](https://drive.google.com/open?id=1E8sS1INRfo13kd-c0FpHDqSqLq7FcWGy)
-
+Here's my video:
 [Bil trying my bot](https://drive.google.com/open?id=1B2bvWDs5jQKEXDW1z-UQV0byoN2_Ec1F)
 
 ---
